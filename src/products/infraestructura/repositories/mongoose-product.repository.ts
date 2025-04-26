@@ -1,15 +1,17 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { Product, ProductDocument } from '../entities/products.entity';
+import { Criteria } from '../../../common/domain/criteria';
 import { ProductRepository } from '../../domain/product.repository';
 import { DummyJsonProductResponse } from '../../domain/response/dummy-json.response';
 import { ProductStatus } from '../../domain/product-status';
+import { Product as ProductEntity, ProductDocument } from '../entities/products.entity';
+import { Product } from '../../domain/response/product';
 
 @Injectable()
 export class MongooseProductRepository implements ProductRepository {
     constructor(
-        @InjectModel(Product.name) private readonly productModel: Model<ProductDocument>,
+        @InjectModel(ProductEntity.name) private readonly productModel: Model<ProductDocument>,
     ) { }
 
     async saveAndUpdateProduct(data: DummyJsonProductResponse, status: ProductStatus): Promise<void> {
@@ -30,7 +32,7 @@ export class MongooseProductRepository implements ProductRepository {
         );
     }
 
-    async updateStatus(productId: number, status: ProductStatus.FAILED, errorData: any) {
+    async updateStatus(productId: number, status: ProductStatus.FAILED, errorData: any): Promise<void> {
         await this.productModel.findOneAndUpdate(
             { productId },
             {
@@ -39,5 +41,25 @@ export class MongooseProductRepository implements ProductRepository {
                 lastSyncedAt: new Date(),
             }
         );
+    }
+
+    async findProducts(criteria: Criteria): Promise<Product[]> {
+        return [];
+    }
+
+    async findProductById(productId: number): Promise<Product> {
+        const product = await this.productModel.findOne({ productId }).exec();
+        if (!product) {
+            throw new Error('Product not found');
+        }
+        return product as Product;
+    }
+
+    async findProductByIdOnlyStatus(productId: number): Promise<{ status: ProductStatus }> {
+        const product = await this.productModel.findOne({ productId }).select('status').exec();
+        if (!product) {
+            throw new Error('Product not found');
+        }
+        return { status: product.status as ProductStatus };
     }
 }
