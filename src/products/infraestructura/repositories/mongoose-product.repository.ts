@@ -7,6 +7,7 @@ import { DummyJsonProductResponse } from '../../domain/response/dummy-json.respo
 import { ProductStatus } from '../../domain/product-status';
 import { Product as ProductEntity, ProductDocument } from '../entities/products.entity';
 import { Product } from '../../domain/response/product';
+import { MongooseCriteriaConvert } from './mongoose.criteria.convert';
 
 @Injectable()
 export class MongooseProductRepository implements ProductRepository {
@@ -44,7 +45,13 @@ export class MongooseProductRepository implements ProductRepository {
     }
 
     async findProducts(criteria: Criteria): Promise<Product[]> {
-        return [];
+        const { start, size } = MongooseCriteriaConvert.convert(criteria);
+        const products = await this.productModel.find()
+            .skip(start)
+            .limit(size)
+            .exec();
+
+        return products as Product[];
     }
 
     async findProductById(productId: number): Promise<Product> {

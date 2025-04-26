@@ -2,7 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { DummyJsonProductResponse } from '../domain/response/dummy-json.response';
 import { ProductStatus } from '../domain/product-status';
 import { MongooseProductRepository } from '../infraestructura/repositories/mongoose-product.repository';
-import { Criteria } from 'src/common/domain/criteria';
+import { CriteriaDto } from '../../common/infraestructura/criteria.dto';
+import { Criteria } from '../../common/domain/criteria';
 
 
 @Injectable()
@@ -17,9 +18,12 @@ export class ProductsService {
         return this.mongooseProductRepository.updateStatus(productId, status, errorData);
     }
 
-    async findProducts(criteria: Criteria) {
+    async findProducts(criteriaDto: CriteriaDto) {
+        const { start, size } = criteriaDto;
+        const criteria = new Criteria(start, size);
         return this.mongooseProductRepository.findProducts(criteria);
     }
+
     async findProductById(productId: number) {
         return this.mongooseProductRepository.findProductById(productId);
     }

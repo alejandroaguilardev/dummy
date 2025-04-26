@@ -24,6 +24,14 @@ describe('ProductsController', () => {
       .expect(201);
 
     expect(response.body.message).toBe(ProductsQueueService.message)
+  });
+
+  it('GET /products should return status 201', async () => {
+    const response = await request(app.getHttpServer())
+      .post('/sync/products')
+      .send({ productIds: IdentifierMother.generateArrayRandom() })
+      .expect(201);
+    expect(response.body.message).toBe(ProductsQueueService.message)
 
   });
 });
