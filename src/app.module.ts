@@ -5,6 +5,7 @@ import { ConfigModule } from '@nestjs/config';
 import { validateEnv } from './config/envs/env.validation';
 import { MongooseModule } from '@nestjs/mongoose';
 import { BullModule } from '@nestjs/bullmq';
+import { ProductsModule } from './products/products.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { BullModule } from '@nestjs/bullmq';
         port: Number(process.env.BULL_MQ_PORT),
       },
     }),
+    ProductsModule,
   ],
   providers: [
     {
