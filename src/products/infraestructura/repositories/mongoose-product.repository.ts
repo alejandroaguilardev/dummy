@@ -9,6 +9,7 @@ import { Product as ProductEntity, ProductDocument } from '../entities/products.
 import { Product } from '../../domain/response/product';
 import { MongooseCriteriaConvert } from './mongoose.criteria.convert';
 import { ProductsResponse } from '../../domain/response/products.response';
+import { ErrorDomain } from '../../../common/domain/error-domain';
 
 @Injectable()
 export class MongooseProductRepository implements ProductRepository {
@@ -72,7 +73,7 @@ export class MongooseProductRepository implements ProductRepository {
     async findProductById(productId: number): Promise<Product> {
         const product = await this.productModel.findOne({ productId }).exec();
         if (!product) {
-            throw new Error('Product not found');
+            throw new ErrorDomain('Product not found', 400, 'Id no valid');
         }
         return product as Product;
     }
@@ -80,7 +81,7 @@ export class MongooseProductRepository implements ProductRepository {
     async findProductByIdOnlyStatus(productId: number): Promise<{ status: ProductStatus }> {
         const product = await this.productModel.findOne({ productId }).select('status').exec();
         if (!product) {
-            throw new Error('Product not found');
+            throw new ErrorDomain('Product not found', 400, 'Id no valid');
         }
         return { status: product.status as ProductStatus };
     }
