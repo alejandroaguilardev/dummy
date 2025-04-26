@@ -19,8 +19,8 @@ export class ProductsService {
     }
 
     async findProducts(criteriaDto: CriteriaDto) {
-        const { start, size } = criteriaDto;
-        const criteria = new Criteria(start, size);
+        const { page, limit } = criteriaDto;
+        const criteria = new Criteria(page, limit);
         return this.mongooseProductRepository.findProducts(criteria);
     }
 

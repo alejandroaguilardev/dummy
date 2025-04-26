@@ -7,11 +7,11 @@ export class CriteriaDto implements Criteria {
     @IsOptional()
     @IsNumber()
     @Type(() => Number)
-    readonly start: number = 0;
+    readonly page: number = 0;
 
     @IsOptional()
     @IsNumber()
     @Max(10000)
     @Type(() => Number)
-    readonly size: number = 10;
+    readonly limit: number = 10;
 }

@@ -8,6 +8,7 @@ import { ProductStatus } from '../../domain/product-status';
 import { Product as ProductEntity, ProductDocument } from '../entities/products.entity';
 import { Product } from '../../domain/response/product';
 import { MongooseCriteriaConvert } from './mongoose.criteria.convert';
+import { ProductsResponse } from '../../domain/response/products.response';
 
 @Injectable()
 export class MongooseProductRepository implements ProductRepository {
@@ -44,14 +45,28 @@ export class MongooseProductRepository implements ProductRepository {
         );
     }
 
-    async findProducts(criteria: Criteria): Promise<Product[]> {
-        const { start, size } = MongooseCriteriaConvert.convert(criteria);
-        const products = await this.productModel.find()
-            .skip(start)
-            .limit(size)
-            .exec();
+    async findProducts(criteria: Criteria): Promise<ProductsResponse> {
+        const { start, size, page } = MongooseCriteriaConvert.convert(criteria);
 
-        return products as Product[];
+        const [products, total] = await Promise.all([
+            this.productModel.find()
+                .skip(start)
+                .limit(size)
+                .exec(),
+            this.productModel.countDocuments()
+        ]);
+
+        const totalPages = Math.ceil(total / size);
+
+        return {
+            rows: products as Product[],
+            total,
+            page,
+            pageSize: size,
+            totalPages,
+            hasNextPage: page < totalPages,
+            hasPreviousPage: page > 1,
+        };
     }
 
     async findProductById(productId: number): Promise<Product> {

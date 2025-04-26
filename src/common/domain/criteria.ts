@@ -1,8 +1,8 @@
 export class Criteria {
 
     constructor(
-        readonly start: number,
-        readonly size: number
+        readonly page: number,
+        readonly limit: number
     ) {
     }
 
