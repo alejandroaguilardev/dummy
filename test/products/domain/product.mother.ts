@@ -2,7 +2,6 @@ import { faker } from '@faker-js/faker';
 import { Product } from '../../../src/products/infraestructura/entities/products.entity';
 import { ProductStatus } from '../../../src/products/domain/product-status';
 import { DummyJsonProductResponse } from '../../../src/products/domain/response/dummy-json.response';
-import { IdentifierMother } from './identifier.mother';
 import { DummyResponseMother } from './dummy.mother';
 
 export class ProductMother {
