@@ -1,13 +1,13 @@
 import { Body, Controller, Post } from '@nestjs/common';
-import { ProductsService } from './products.service';
+import { ProductsService } from './services/product-queue.service';
 import { CreateSyncProductsDto } from './dto/create-sync-products.dto';
 
-@Controller('/')
+@Controller()
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) { }
 
   @Post('sync/products')
-  syncProducts(@Body() createSyncProductsDto: CreateSyncProductsDto) {
-    return true;
+  async syncProducts(@Body() createSyncProductsDto: CreateSyncProductsDto) {
+    return this.productsService.syncProducts(createSyncProductsDto);
   }
 }

@@ -1,5 +1,3 @@
-import { BullModule } from '@nestjs/bullmq';
-
-export const BullProductSyncQueue = BullModule.registerQueue({
-    name: 'product-sync-queue',
-});
+export const PRODUCTS_QUEUE = {
+    sync: "product-sync-queue",
+} as const;
