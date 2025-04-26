@@ -7,4 +7,8 @@ export class IdentifierMother {
             max
         })
     }
+
+    static generateArrayRandom(length = 10, min = 1, max = 100) {
+        return Array.from({ length }).map(() => faker.number.int({ min, max }));
+    }
 }

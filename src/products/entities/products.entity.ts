@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
+import { DummyJsonProductResponse } from '../infraestructura/dummy-json.response';
 
 export type ProductDocument = Product & Document;
 
@@ -29,8 +29,8 @@ export class Product {
     @Prop({ enum: ['pending', 'completed', 'failed'], default: 'pending' })
     status: string;
 
-    @Prop()
-    externalApiResponse?: any;
+    @Prop({ type: Object })
+    externalApiResponse?: DummyJsonProductResponse;
 }
 
 export const ProductSchema = SchemaFactory.createForClass(Product);

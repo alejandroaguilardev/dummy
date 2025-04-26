@@ -1,20 +1,27 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { ProductsController } from '../../src/products/products.controller';
-import { ProductsService } from '../../src/products/products.service';
+import * as request from 'supertest';
+import { INestApplication } from '@nestjs/common';
+import { IdentifierMother } from './domain/identifier.mother';
+import { AppModule } from '../../src/app.module';
 
 describe('ProductsController', () => {
-  let controller: ProductsController;
+  let app: INestApplication;
 
   beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      controllers: [ProductsController],
-      providers: [ProductsService],
+    const moduleFixture: TestingModule = await Test.createTestingModule({
+      imports: [AppModule],
     }).compile();
 
-    controller = module.get<ProductsController>(ProductsController);
+    app = moduleFixture.createNestApplication();
+    await app.init();
   });
 
-  it('should be defined', () => {
-    expect(controller).toBeDefined();
+  it('POST /sync/products should return status 201', async () => {
+    const response = await request(app.getHttpServer())
+      .post('/sync/products')
+      .send({ productIds: IdentifierMother.generateArrayRandom() })
+      .expect(201);
   });
+
+
 });
