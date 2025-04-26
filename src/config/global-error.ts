@@ -6,6 +6,7 @@ import {
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { ErrorDomain } from '../common/domain/error-domain';
+import { ThrottlerException } from '@nestjs/throttler';
 
 @Catch()
 export class GlobalExceptionFilter implements ExceptionFilter {
@@ -27,6 +28,10 @@ export class GlobalExceptionFilter implements ExceptionFilter {
             status = 404;
             message = 'El recurso solicitado no existe';
             error = 'Not Found';
+        } else if (exception instanceof ThrottlerException) {
+            status = 429;
+            message = 'Se han realizado demasiadas solicitudes. Intente más tarde.';
+            error = 'Too Many Requests';
         }
 
         if (status === 500) {

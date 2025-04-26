@@ -6,10 +6,8 @@ import { options } from './config/swagger';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  if (process.env.NODE_ENV !== 'production') {
-    const document = SwaggerModule.createDocument(app, options);
-    SwaggerModule.setup('/', app, document);
-  }
+  const document = SwaggerModule.createDocument(app, options);
+  SwaggerModule.setup('/', app, document);
 
   await app.listen(process.env.PORT ?? 3000);
 }
