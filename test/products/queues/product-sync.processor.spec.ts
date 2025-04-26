@@ -21,7 +21,6 @@ describe('ProductSyncProcessor', () => {
 
     it('Process', async () => {
         const productIds = IdentifierMother.generateArrayRandom();
-
         const waitForSpecificProductCreated = new Promise<void>((resolve) => {
             eventEmitter.on('product.created', (event) => {
                 if (event.productId === productIds[0]) {
