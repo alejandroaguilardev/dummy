@@ -1,7 +1,7 @@
 import { applyDecorators } from '@nestjs/common';
 import { ApiBadRequestResponse, ApiBody, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { CreateSyncProductsDto } from '../dto/create-sync-products.dto';
-import { ProductsService } from '../services/product-queue.service';
+import { ProductsQueueService } from '../../services/products-queue.service';
 
 export function SyncProductsDocs() {
     return applyDecorators(
@@ -31,7 +31,7 @@ export function SyncProductsDocs() {
                         properties: {
                             message: {
                                 type: 'string',
-                                example: ProductsService.message,
+                                example: ProductsQueueService.message,
                             },
                         },
                     },

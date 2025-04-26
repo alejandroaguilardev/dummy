@@ -3,7 +3,7 @@ import * as request from 'supertest';
 import { INestApplication } from '@nestjs/common';
 import { IdentifierMother } from './domain/identifier.mother';
 import { AppModule } from '../../src/app.module';
-import { ProductsService } from '../../src/products/services/product-queue.service';
+import { ProductsQueueService } from '../../src/products/services/products-queue.service';
 
 describe('ProductsController', () => {
   let app: INestApplication;
@@ -23,7 +23,7 @@ describe('ProductsController', () => {
       .send({ productIds: IdentifierMother.generateArrayRandom() })
       .expect(201);
 
-    expect(response.body.message).toBe(ProductsService.message)
+    expect(response.body.message).toBe(ProductsQueueService.message)
 
   });
 });

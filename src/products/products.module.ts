@@ -3,10 +3,13 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { BullModule } from '@nestjs/bullmq';
 import { BullBoardModule } from '@bull-board/nestjs';
 import { BullMQAdapter } from "@bull-board/api/bullMQAdapter";
-import { ProductsService } from './services/product-queue.service';
+import { ProductsQueueService } from './services/products-queue.service';
 import { ProductsController } from './products.controller';
-import { Product, ProductSchema } from './entities/products.entity';
-import { PRODUCTS_QUEUE } from './queues/bull.config';
+import { Product, ProductSchema } from './infraestructura/entities/products.entity';
+import { PRODUCTS_QUEUE } from './domain/queues/product.queues';
+import { MongooseProductRepository } from './infraestructura/repositories/mongoose-product.repository';
+import { ProductsService } from './services/products.service';
+import { ProductSyncProcessor } from './queues/product-sync.processor';
 
 @Module({
   imports: [
@@ -20,6 +23,6 @@ import { PRODUCTS_QUEUE } from './queues/bull.config';
     }),
   ],
   controllers: [ProductsController],
-  providers: [ProductsService],
+  providers: [MongooseProductRepository, ProductsQueueService, ProductsService, ProductSyncProcessor],
 })
 export class ProductsModule { }

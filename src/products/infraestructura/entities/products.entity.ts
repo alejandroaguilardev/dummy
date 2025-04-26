@@ -1,7 +1,9 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { DummyJsonProductResponse } from '../infraestructura/dummy-json.response';
+import { DummyJsonProductResponse } from '../../domain/response/dummy-json.response';
+import { ProductStatus } from '../../domain/product-status';
 
 export type ProductDocument = Product & Document;
+
 
 @Schema()
 export class Product {
@@ -26,7 +28,7 @@ export class Product {
     @Prop({ default: null })
     lastSyncedAt: Date;
 
-    @Prop({ enum: ['pending', 'completed', 'failed'], default: 'pending' })
+    @Prop({ enum: ProductStatus, default: ProductStatus.PENDING })
     status: string;
 
     @Prop({ type: Object })

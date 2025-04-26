@@ -1,4 +1,4 @@
-import { DummyJsonProductResponse } from "./dummy-json.response";
+import { DummyJsonProductResponse } from "../domain/response/dummy-json.response";
 
 export class DummyJsonFetch {
     static async getProduct(productId: number) {

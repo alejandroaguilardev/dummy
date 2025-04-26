@@ -1,12 +1,12 @@
 import { InjectQueue } from '@nestjs/bullmq';
 import { Injectable } from '@nestjs/common';
 import { Queue } from 'bullmq';
-import { CreateSyncProductsDto } from '../dto/create-sync-products.dto';
-import { PRODUCTS_QUEUE } from '../queues/bull.config';
+import { CreateSyncProductsDto } from '../infraestructura/dto/create-sync-products.dto';
+import { PRODUCTS_QUEUE } from '../domain/queues/product.queues';
 
 
 @Injectable()
-export class ProductsService {
+export class ProductsQueueService {
     constructor(
         @InjectQueue(PRODUCTS_QUEUE.sync) private readonly syncQueue: Queue,
     ) { }
@@ -28,9 +28,9 @@ export class ProductsService {
         );
         try {
             await Promise.all(promises);
-            return { message: ProductsService.message };
+            return { message: ProductsQueueService.message };
         } catch (error) {
-            throw new Error(ProductsService.error);
+            throw new Error(ProductsQueueService.error);
         }
     }
 }
