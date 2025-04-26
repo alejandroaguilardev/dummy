@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 import { BullModule } from '@nestjs/bullmq';
 import { BullBoardModule } from '@bull-board/nestjs';
 import { BullMQAdapter } from "@bull-board/api/bullMQAdapter";
@@ -13,6 +14,7 @@ import { ProductSyncProcessor } from './queues/product-sync.processor';
 
 @Module({
   imports: [
+    EventEmitterModule.forRoot(),
     MongooseModule.forFeature([{ name: Product.name, schema: ProductSchema }]),
     BullModule.registerQueue({
       name: PRODUCTS_QUEUE.sync,

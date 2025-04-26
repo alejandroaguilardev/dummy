@@ -1,12 +1,17 @@
 import { Processor, WorkerHost } from '@nestjs/bullmq';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import { Job } from 'bullmq';
 import { DummyJsonFetch } from '../infraestructura/dummy-json-fetch';
 import { ProductsService } from '../services/products.service';
 import { ProductStatus } from '../domain/product-status';
+import { ProductCreatedEvent } from '../domain/product-created-event';
 
 @Processor('product-sync-queue')
 export class ProductSyncProcessor extends WorkerHost {
-    constructor(private readonly productService: ProductsService) {
+    constructor(
+        private readonly productService: ProductsService,
+        private readonly eventEmitter: EventEmitter2,
+    ) {
         super()
     }
     async process(job: Job) {
@@ -15,6 +20,7 @@ export class ProductSyncProcessor extends WorkerHost {
         try {
             const data = await DummyJsonFetch.getProduct(productId);
             await this.productService.saveAndUpdateProduct(data, ProductStatus.COMPLETED);
+            this.eventEmitter.emit('product.created', new ProductCreatedEvent(productId));
         } catch (error) {
             if (job.attemptsMade >= 2) {
                 await this.productService.updateStatus(productId, ProductStatus.FAILED, error.response?.data || error.message);
