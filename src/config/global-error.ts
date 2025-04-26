@@ -2,6 +2,7 @@ import {
     Catch,
     ExceptionFilter,
     ArgumentsHost,
+    NotFoundException,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { ErrorDomain } from '../common/domain/error-domain';
@@ -22,10 +23,14 @@ export class GlobalExceptionFilter implements ExceptionFilter {
             status = exception.code;
             error = exception.error;
             message = exception.message;
+        } else if (exception instanceof NotFoundException) {
+            status = 404;
+            message = 'El recurso solicitado no existe';
+            error = 'Not Found';
         }
 
         if (status === 500) {
-            console.log(exception);
+            console.error(exception);
         }
 
         response.status(status).json({
