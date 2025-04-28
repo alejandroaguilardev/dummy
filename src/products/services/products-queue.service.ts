@@ -24,11 +24,7 @@ export class ProductsQueueService {
                 },
             })
         );
-        try {
-            await Promise.all(promises);
-            return { message: ProductsQueueService.message };
-        } catch (error) {
-            throw error;
-        }
+        await Promise.all(promises);
+        return { message: ProductsQueueService.message };
     }
 }

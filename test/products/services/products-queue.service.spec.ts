@@ -4,6 +4,7 @@ import { ProductsQueueService } from '../../../src/products/services/products-qu
 import { CreateSyncProductsDto } from '../../../src/products/infraestructura/dto/create-sync-products.dto';
 import { PRODUCTS_QUEUE } from '../../../src/products/domain/queues/product.queues';
 import { IdentifierMother } from '../domain/identifier.mother';
+import { ErrorDomain } from '../../../src/common/domain/error-domain';
 
 type MockQueue = {
     add: jest.Mock;
@@ -57,11 +58,14 @@ describe('ProductsQueueService', () => {
     it('should failed jobs', async () => {
         const productIds = IdentifierMother.generateArrayRandom();
         const createSyncJobDto: CreateSyncProductsDto = { productIds };
-
-        mockSyncQueue.add.mockReturnValue(new Error('Queue error'));
-        const response = await productsQueueService.syncProducts(createSyncJobDto);
-        console.log(response)
-
+        const error = new ErrorDomain('Queue error', 400, "error");
+        mockSyncQueue.add.mockRejectedValue(error);
+        try {
+            await productsQueueService.syncProducts(createSyncJobDto);
+            fail('should failed jobs');
+        } catch (throwError) {
+            expect(throwError.message).toBe(error.message);
+        }
     });
 
 });
