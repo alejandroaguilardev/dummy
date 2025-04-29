@@ -1,7 +1,6 @@
 import { Processor, WorkerHost } from '@nestjs/bullmq';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { Job } from 'bullmq';
-import { DummyJsonFetch } from '../infraestructura/dummy/dummy-json-fetch';
 import { ProductsService } from '../services/products.service';
 import { ProductStatus } from '../domain/product-status';
 import { ProductCreatedEvent } from '../domain/product-created-event';
