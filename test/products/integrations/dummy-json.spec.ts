@@ -1,12 +1,23 @@
-import { DummyJsonFetch } from "../../../src/products/infraestructura/dummy-json-fetch";
+import { DummyJsonFetch } from "../../../src/products/infraestructura/dummy/dummy-json-fetch";
 import { IdentifierMother } from "../domain/identifier.mother";
 
 describe('DummyJson', () => {
 
-    it('should_successfully_get_productId', async () => {
+    it('should return a defined product', async () => {
         const productId = IdentifierMother.generateRandom();
-        const data = await DummyJsonFetch.getProduct(productId);
+        const result = await DummyJsonFetch.getProduct(productId);
+        expect(result).toBeDefined();
+    });
 
-        expect(data.id).toBe(productId);
+    it('should return a product with correct ID', async () => {
+        const productId = IdentifierMother.generateRandom();
+        const result = await DummyJsonFetch.getProduct(productId);
+        expect(result.id).toBe(productId);
+    });
+
+    it('should return a product with a title', async () => {
+        const productId = IdentifierMother.generateRandom();
+        const result = await DummyJsonFetch.getProduct(productId);
+        expect(result.title).toBeDefined();
     });
 });

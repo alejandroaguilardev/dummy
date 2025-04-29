@@ -11,6 +11,8 @@ import { PRODUCTS_QUEUE } from './domain/queues/product.queues';
 import { MongooseProductRepository } from './infraestructura/repositories/mongoose-product.repository';
 import { ProductsService } from './services/products.service';
 import { ProductSyncProcessor } from './queues/product-sync.processor';
+import { HttpModule } from '@nestjs/axios';
+import { DummyAxios } from './infraestructura/dummy/dummy.axios';
 
 @Module({
   imports: [
@@ -23,8 +25,18 @@ import { ProductSyncProcessor } from './queues/product-sync.processor';
       name: PRODUCTS_QUEUE.sync,
       adapter: BullMQAdapter,
     }),
+    HttpModule.register({
+      timeout: 3000,
+      maxRedirects: 3,
+    }),
   ],
   controllers: [ProductsController],
-  providers: [MongooseProductRepository, ProductsQueueService, ProductsService, ProductSyncProcessor],
+  providers: [
+    MongooseProductRepository,
+    ProductsQueueService,
+    ProductsService,
+    ProductSyncProcessor,
+    DummyAxios
+  ],
 })
 export class ProductsModule { }

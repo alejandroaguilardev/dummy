@@ -1,5 +1,5 @@
-import { ErrorDomain } from "../../common/domain/error-domain";
-import { DummyJsonProductResponse } from "../domain/response/dummy-json.response";
+import { ErrorDomain } from "../../../common/domain/error-domain";
+import { DummyJsonProductResponse } from "../../domain/response/dummy-json.response";
 
 export class DummyJsonFetch {
     static async getProduct(productId: number) {
