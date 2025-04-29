@@ -5,7 +5,7 @@ export class MongooseCriteriaConvert {
     static convert(criteria: Criteria) {
         return {
             page: criteria.page,
-            start: criteria.page * criteria.limit,
+            start: (criteria.page - 1) * criteria.limit,
             size: criteria.limit,
         }
     }
